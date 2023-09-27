@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs')
 //const api = require('./routes/index.js');
 const db = require('./db/db.json')
 const PORT = process.env.PORT||3001;
@@ -13,6 +14,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 app.get('/api/notes',(req,res)=>{
+  res.json(db)
+})
+app.post("/api/notes",(req,res)=>{
+  const newNote = req.body
+  newNote.id = Math.random()
+  console.log(newNote)
+  db.push(newNote)
+  fs.writeFileSync('./db/db.json', JSON.stringify(db))
   res.json(db)
 })
 // GET Route for homepage
